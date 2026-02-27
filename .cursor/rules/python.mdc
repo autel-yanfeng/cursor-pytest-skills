@@ -1,0 +1,9 @@
+---
+description: Python 编码规范
+globs: ["**/*.py"]
+alwaysApply: false
+---
+- 格式：Black，行长 88，Google Docstring
+- 导入顺序：标准库 → 第三方 → 本地（空行分隔）
+- 命名：snake_case 变量/函数，PascalCase 类
+- 类型注解：所有公共函数必须完整

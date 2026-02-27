@@ -1,0 +1,9 @@
+---
+description: 团队铁律，所有对话强制注入
+alwaysApply: true
+---
+- 中文回复
+- 类型注解完整（参数 + 返回值）
+- 禁止裸 except（必须指定异常类型）
+- 禁止可变默认参数
+- 禁止直接 print（使用 logging）

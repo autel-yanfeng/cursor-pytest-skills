@@ -1,52 +1,13 @@
 ---
-description: pytest 测试生成规范，适用于所有测试文件的创建与修改
+description: pytest 测试规范，生成或修改测试文件时适用
 globs: ["test_*.py", "*_test.py", "conftest.py"]
 alwaysApply: false
 ---
-
-# pytest 测试生成规范
-
-## 测试框架
-- 使用 pytest 作为唯一测试框架
-- 禁止使用 unittest.TestCase 风格（除非维护遗留代码）
-- 所有测试文件命名为 `test_<module>.py`，放在 `tests/` 目录下
-
-## 测试结构
-- 每个测试函数必须以 `test_` 开头
-- 使用 **Arrange-Act-Assert (AAA)** 三段式结构，用注释 `# Arrange` `# Act` `# Assert` 分隔
-- 每个测试只验证一个行为（单一职责原则）
-- 相关测试用 `class Test<Feature>` 分组，类名无需继承任何基类
-
-## Fixtures
-- 公共 fixture 放在 `conftest.py` 中
-- 优先用 fixture 替代重复的 setUp 逻辑
-- fixture 的 scope 显式声明：`function`（默认）/ `class` / `module` / `session`
-- 有副作用的 fixture 使用 `yield` 并在 yield 后执行清理逻辑
-
-## Mock
-- 使用 `pytest-mock` 的 `mocker` fixture，不直接 `import unittest.mock`
-- Mock 外部依赖（网络请求、数据库、文件系统、时间）
-- 不 mock 被测单元的内部逻辑
-- 优先使用 `mocker.patch` 而非 `mocker.MagicMock` 直接赋值
-
-## 断言
-- 使用原生 `assert` 语法，不使用 `assertEqual` 等方法
-- 复杂对象用 `==` 比较，不用 `assertTrue(a == b)`
-- 异常测试使用 `pytest.raises(ExceptionType, match="error message pattern")`
-- 浮点数比较使用 `pytest.approx` 或手动设置误差范围
-
-## 覆盖率
-- 每个公共函数至少包含：正常路径、边界条件、异常路径三类用例
-- 相似用例使用 `@pytest.mark.parametrize` 合并，减少重复代码
-- 使用 `@pytest.mark.<tag>` 为测试分组（如 `@pytest.mark.slow`、`@pytest.mark.integration`）
-
-## 命名规范
-- 测试函数：`test_<function_name>_<scenario>_<expected_result>`
-  - 例：`test_divide_by_zero_raises_value_error`
-- Fixture：名词形式，描述提供的数据
-  - 例：`user_fixture`、`db_session`、`mock_api_client`
-
-## 禁止事项
-- 禁止测试中包含业务逻辑
-- 禁止测试依赖执行顺序（每个测试必须独立）
-- 禁止在测试中硬编码时间戳或随机值（使用 fixture 或 mock）
+- 结构：AAA（注释标注 # Arrange / # Act / # Assert）
+- 命名：test_<fn>_<scenario>_<expected>
+- 相似用例：@pytest.mark.parametrize 合并
+- 浮点比较：pytest.approx
+- 异常断言：pytest.raises(Type, match="pattern")
+- Mock：mocker fixture only，禁止直接 import unittest.mock
+- 公共 fixture：放 conftest.py，scope 显式声明
+- 覆盖：正常路径 + 边界值 + 异常路径
